@@ -15,12 +15,12 @@ export default class ButtondownPlugin extends Plugin {
 		if (!this.settings.APIKey) {
 			return null;
 		}
-		
+
 		try {
 			const arrayBuffer = await this.app.vault.readBinary(file);
 			const formData = new FormData();
 			formData.append('image', new Blob([arrayBuffer], { type: `image/${file.extension}` }), file.name);
-			
+
 			const result = await fetch("https://api.buttondown.email/v1/images", {
 				method: "POST",
 				headers: {
@@ -28,12 +28,19 @@ export default class ButtondownPlugin extends Plugin {
 				},
 				body: formData,
 			});
-			
+
 			if (result.ok) {
 				const response = await result.json();
 				return response.image;
+			} else if (result.status === 403) {
+				new Notice(`Failed to upload image ${file.name}: Invalid API key`);
+				console.error(`Image upload failed with 403 for ${file.name}`);
+			} else {
+				new Notice(`Failed to upload image ${file.name}: HTTP ${result.status}`);
+				console.error(`Image upload failed for ${file.name}:`, result.status, await result.text());
 			}
 		} catch (e) {
+			new Notice(`Error uploading image ${file.name}. Check console for details.`);
 			console.error("Error uploading image: ", e);
 		}
 		return null;
@@ -106,7 +113,9 @@ export default class ButtondownPlugin extends Plugin {
 			id: 'note-to-buttondown-draft',
 			name: 'Create a new Buttondown draft from this note',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				this.saveDraft(view.file.basename, editor.getValue())
+				if (view.file) {
+					this.saveDraft(view.file.basename, editor.getValue())
+				}
 			}
 		});
 

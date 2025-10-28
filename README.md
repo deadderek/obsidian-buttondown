@@ -13,6 +13,19 @@ This plugin allows you to write drafts for your emails in [Obsidian](https://obs
 5. Call the command "Create a new Buttondown draft from this note" from the Command Palette (Ctrl-P) to create a new draft in Buttondown, where the email subject is the filename of your note, and the email body is the content of your note
 6. See your drafts in Buttondown [here](https://buttondown.email/emails/drafts), where you can edit and preview the draft, then schedule or send the email to your list.
 
+## Privacy and network usage
+
+This plugin makes network requests to Buttondown's API (`https://api.buttondown.email`) when you use the command to create a draft. The following data is transmitted:
+
+- Your Buttondown API key (configured in settings)
+- The content of your note (email body)
+- The filename of your note (email subject)
+- Any images referenced in your note (uploaded to Buttondown's image storage)
+
+All data is sent directly to Buttondown's servers over HTTPS. No data is collected, stored, or transmitted to any other third parties. The plugin does not include any telemetry or analytics.
+
+You must explicitly invoke the "Create a new Buttondown draft from this note" command for any network requests to occur. The plugin does not transmit data automatically or in the background.
+
 ## Support me
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U6U7BUEZ6)
