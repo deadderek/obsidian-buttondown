@@ -25,5 +25,8 @@
     "obsidian": "^1.10.0",
     "tslib": "^2.8.1",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "browser-image-compression": "^2.0.2"
   }
 }
